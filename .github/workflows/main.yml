@@ -6,6 +6,18 @@ on:
   workflow_dispatch:
 
 jobs:
+  prettier:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: prettier
+        run: npm run prettier
+
   lint-vite:
     runs-on: ubuntu-latest
 
