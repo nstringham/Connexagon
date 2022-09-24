@@ -1,4 +1,4 @@
-import { html, render, TemplateResult } from "lit";
+import { html, render, type TemplateResult } from "lit";
 
 const outlet = document.querySelector("#outlet") as HTMLElement;
 
@@ -7,7 +7,7 @@ async function renderRoute(path: string) {
 }
 
 async function getRoute(path: string): Promise<TemplateResult> {
-  const [_, page, id] = path.split("/");
+  const [, page, id] = path.split("/");
   if (page === "games" && id) {
     await import("./elements/game-board");
     return html`<game-board id="${id}"></game-board>`;

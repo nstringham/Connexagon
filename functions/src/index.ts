@@ -1,7 +1,8 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 import { Game, isValidMove, colors, getArrayLength, GridData, Cell, getSideLength, UserData, Player } from "./types";
-const emojiRegex = require("emoji-regex")();
+import emojiRegexFactory from "emoji-regex";
+const emojiRegex = emojiRegexFactory();
 
 admin.initializeApp();
 
@@ -134,7 +135,7 @@ export const skipTurn = functions.https.onCall((id, context) => {
   }
 });
 
-export const handleUserDataChange = functions.firestore.document("users/{uid}").onUpdate((change, context) => {
+export const handleUserDataChange = functions.firestore.document("users/{uid}").onUpdate((change) => {
   const nickname: string | undefined = change.after.data()?.nickname;
   if (nickname && emojiRegex.exec(nickname)) {
     console.error(`"${nickname}" contains emoji so "${change.after.id}" 's nickname has bean reset`);
@@ -259,7 +260,7 @@ async function makeGame(size: number, uids: string[]) {
       threshold *= 0.99;
     }
   }
-  board.forEach((cell) => {
+  board.forEach((cell: { distance?: number }) => {
     delete cell.distance;
   });
   const players = await Promise.all(

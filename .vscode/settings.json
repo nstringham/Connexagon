@@ -1,4 +1,5 @@
 {
   "cSpell.words": ["connexagon"],
-  "conventionalCommits.scopes": ["client", "functions"]
+  "conventionalCommits.scopes": ["client", "functions"],
+  "eslint.workingDirectories": ["/client", "/functions"]
 }

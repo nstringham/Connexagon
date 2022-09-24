@@ -28,7 +28,7 @@ export type Move = {
   positions: number[];
 };
 
-export function isValidMove(move: any, game: Game): move is Move {
+export function isValidMove(move: { positions?: unknown }, game: Game): move is Move {
   if (game.winner !== -1) {
     return false;
   }
@@ -39,7 +39,7 @@ export function isValidMove(move: any, game: Game): move is Move {
     return false;
   }
   for (const position of move.positions) {
-    if (game.board[position].owner !== -1 || game.board[position].tower) {
+    if (typeof position !== "number" || game.board[position]?.owner !== -1 || game.board[position].tower) {
       return false;
     }
   }
@@ -86,19 +86,21 @@ export class GridData {
     while (RowStarts[currentRow + 1] <= current) currentRow++;
     return (directions || ["UR", "UL", "NR", "NL", "DR", "DL"]).map((direction) => {
       switch (direction) {
-        case "NR":
+        case "NR": {
           return RowStarts[currentRow + 1] - 1 === current ? -1 : current + 1;
-        case "NL":
+        }
+        case "NL": {
           return RowStarts[currentRow] === current ? -1 : current - 1;
+        }
         case "UR":
         case "UL":
         case "DR":
-        case "DL":
+        case "DL": {
           const rowPosition = current - RowStarts[currentRow];
           const left = direction.charAt(1) === "L";
           switch (direction) {
             case "UR":
-            case "UL":
+            case "UL": {
               const above = currentRow - (sideLength - 1) <= 0;
               if (
                 currentRow === 0 ||
@@ -107,8 +109,9 @@ export class GridData {
                 return -1;
               }
               return RowStarts[currentRow - 1] + (left ? -0.5 : +0.5) + (above ? -0.5 : 0.5) + rowPosition;
+            }
             case "DR":
-            case "DL":
+            case "DL": {
               const below = currentRow - (sideLength - 1) >= 0;
               if (
                 currentRow === sideLength * 2 - 2 ||
@@ -117,7 +120,9 @@ export class GridData {
                 return -1;
               }
               return RowStarts[currentRow + 1] + (left ? -0.5 : +0.5) + (below ? -0.5 : 0.5) + rowPosition;
+            }
           }
+        }
       }
     });
   }
