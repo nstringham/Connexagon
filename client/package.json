@@ -13,6 +13,7 @@
     "vite-plugin-fonts": "^0.6.0"
   },
   "dependencies": {
+    "@material/web": "^0.1.0-alpha.0",
     "firebase": "^9.10.0",
     "lit": "^2.3.1"
   }
